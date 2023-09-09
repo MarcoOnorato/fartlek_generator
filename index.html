@@ -211,6 +211,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#generate_stochastic_fartlek.generate_interval_times" class="md-nav__link">
+    generate_interval_times()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#generate_stochastic_fartlek.get_fc_thresh" class="md-nav__link">
     get_fc_thresh()
   </a>
@@ -282,6 +289,13 @@
         <li class="md-nav__item">
   <a href="#generate_stochastic_fartlek.generate_fartlek" class="md-nav__link">
     generate_fartlek()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generate_stochastic_fartlek.generate_interval_times" class="md-nav__link">
+    generate_interval_times()
   </a>
   
 </li>
@@ -488,6 +502,125 @@
 
 
 
+<h2 id="generate_stochastic_fartlek.generate_interval_times" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">generate_interval_times</span><span class="p">(</span><span class="nb">type</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>genera i tempi di attività/riposo in base al tipo di intensità scelta</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>type</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>il tipo di intensità scelta</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>list[int]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>tuple[int]: durata totale dell'intervallo, tempo di attività, tempo di recupero</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>generate_stochastic_fartlek.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">generate_interval_times</span><span class="p">(</span><span class="nb">type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;genera i tempi di attività/riposo in base al tipo di intensità scelta</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        type (str): il tipo di intensità scelta</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple[int]: durata totale dell&#39;intervallo, tempo di attività, tempo di recupero</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span>
+        <span class="n">active_duration</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">75</span><span class="p">,</span> <span class="mi">91</span><span class="p">)</span>
+        <span class="n">interval_time</span> <span class="o">=</span> <span class="mi">120</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">active_duration</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">67</span><span class="p">,</span> <span class="mi">84</span><span class="p">)</span>
+        <span class="n">interval_time</span> <span class="o">=</span> <span class="mi">60</span>
+
+    <span class="n">active_freq</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">active_duration</span><span class="p">)</span>
+    <span class="n">activity_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">interval_time</span> <span class="o">*</span> <span class="n">active_freq</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">rest_time</span> <span class="o">=</span> <span class="n">interval_time</span> <span class="o">-</span> <span class="n">activity_time</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">interval_time</span><span class="p">,</span> <span class="n">activity_time</span><span class="p">,</span> <span class="n">rest_time</span><span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
 <h2 id="generate_stochastic_fartlek.get_fc_thresh" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">get_fc_thresh</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">time_array</span><span class="p">)</span></code>
 
@@ -649,30 +782,7 @@
 
           <details class="quote">
             <summary>Source code in <code>generate_stochastic_fartlek.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">106</span>
 <span class="normal">107</span>
 <span class="normal">108</span>
 <span class="normal">109</span>
@@ -693,7 +803,30 @@
 <span class="normal">124</span>
 <span class="normal">125</span>
 <span class="normal">126</span>
-<span class="normal">127</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">hiit_timings</span><span class="p">(</span><span class="n">total_time</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">hiit_timings</span><span class="p">(</span><span class="n">total_time</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;genera un programma di allenamento di tipo hiit</span>
 
 <span class="sd">    Args:</span>
@@ -701,39 +834,39 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">total_time</span> <span class="o">=</span> <span class="n">total_time</span> <span class="o">*</span> <span class="mi">60</span>
     <span class="n">consecutive_hi_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">effective_training_time</span> <span class="o">=</span> <span class="mi">0</span>
+
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;20m riscaldamento&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">total_time</span><span class="p">)</span>
     <span class="k">while</span> <span class="n">total_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">effective_training_time</span> <span class="o">&gt;=</span> <span class="mi">900</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1m rest opzionale&quot;</span><span class="p">)</span>
+            <span class="n">effective_training_time</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="n">total_time</span> <span class="o">&gt;</span> <span class="mi">120</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">choice</span><span class="p">([</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="s2">&quot;m&quot;</span><span class="p">:</span>
-                <span class="n">active_freq</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">75</span><span class="p">,</span> <span class="mi">91</span><span class="p">))</span>
-                <span class="n">total_interval</span> <span class="o">=</span> <span class="mi">120</span>
-                <span class="n">mi_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_interval</span> <span class="o">*</span> <span class="n">active_freq</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-                <span class="n">rest_time</span> <span class="o">=</span> <span class="n">total_interval</span> <span class="o">-</span> <span class="n">mi_time</span>
-                <span class="n">mi_time_formatted</span> <span class="o">=</span> <span class="n">seconds_to_minutes</span><span class="p">(</span><span class="n">mi_time</span><span class="p">)</span>
-                <span class="n">total_time</span> <span class="o">-=</span> <span class="mi">120</span>
-                <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mi_time_formatted</span><span class="si">}</span><span class="s2"> a media intensità&quot;</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rest_time</span><span class="si">}</span><span class="s2">s di recupero attivo&quot;</span><span class="p">,</span>
-                    <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="p">)</span>
+            <span class="n">random_intensity_choice</span> <span class="o">=</span> <span class="n">choice</span><span class="p">([</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">consecutive_hi_count</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
                 <span class="n">consecutive_hi_count</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;30s di recupero attivo o rest&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">total_time</span> <span class="o">-=</span> <span class="mi">30</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">consecutive_hi_count</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;30s di recupero attivo&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                    <span class="n">total_time</span> <span class="o">-=</span> <span class="mi">30</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">active_freq</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">67</span><span class="p">,</span> <span class="mi">84</span><span class="p">))</span>
-                    <span class="n">total_interval</span> <span class="o">=</span> <span class="mi">60</span>
-                    <span class="n">hi_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_interval</span> <span class="o">*</span> <span class="n">active_freq</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-                    <span class="n">rest_time</span> <span class="o">=</span> <span class="n">total_interval</span> <span class="o">-</span> <span class="n">hi_time</span>
-                    <span class="n">total_time</span> <span class="o">-=</span> <span class="mi">60</span>
+                <span class="n">interval_time</span><span class="p">,</span> <span class="n">activity_time</span><span class="p">,</span> <span class="n">rest_time</span> <span class="o">=</span> <span class="n">generate_interval_times</span><span class="p">(</span>
+                    <span class="n">random_intensity_choice</span>
+                <span class="p">)</span>
+                <span class="n">total_time</span> <span class="o">-=</span> <span class="n">interval_time</span>
+                <span class="n">effective_training_time</span> <span class="o">+=</span> <span class="n">interval_time</span>
+                <span class="k">if</span> <span class="n">random_intensity_choice</span> <span class="o">==</span> <span class="s2">&quot;h&quot;</span><span class="p">:</span>
+                    <span class="n">consecutive_hi_count</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="nb">print</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">hi_time</span><span class="si">}</span><span class="s2">s ad alta intensità&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">activity_time</span><span class="si">}</span><span class="s2">s ad alta intensità&quot;</span><span class="p">,</span>
                         <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rest_time</span><span class="si">}</span><span class="s2">s di recupero attivo&quot;</span><span class="p">,</span>
                         <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
                     <span class="p">)</span>
-                    <span class="n">consecutive_hi_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">consecutive_hi_count</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">seconds_to_minutes</span><span class="p">(</span><span class="n">activity_time</span><span class="p">)</span><span class="si">}</span><span class="s2"> a media intensità&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rest_time</span><span class="si">}</span><span class="s2">s di recupero attivo&quot;</span><span class="p">,</span>
+                        <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">seconds_to_minutes</span><span class="p">(</span><span class="n">total_time</span><span class="p">)</span><span class="si">}</span><span class="s2"> a media intensità&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">break</span>
