@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "fartlek-generator"
+version = "1"
+description = "Genera una sessione di allenamento fartlek stocastica"
+authors = ["Marco Onorato"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
