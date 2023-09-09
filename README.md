@@ -1,6 +1,7 @@
 # fartlek_generator
 Genera una sessione di allenamento fartlek stocastica
 
+https://marcoonorato.github.io/fartlek_generator/
 
 1 - Non sono un medico
 
