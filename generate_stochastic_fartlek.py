@@ -80,6 +80,29 @@ def generate_fartlek(
     print("10min defaticamento")
 
 
+def generate_interval_times(type: str) -> list[int]:
+    """genera i tempi di attività/riposo in base al tipo di intensità scelta
+
+    Args:
+        type (str): il tipo di intensità scelta
+
+    Returns:
+        tuple[int]: durata totale dell'intervallo, tempo di attività, tempo di recupero
+    """
+    if type == "m":
+        active_duration = range(75, 91)
+        interval_time = 120
+    else:
+        active_duration = range(67, 84)
+        interval_time = 60
+
+    active_freq = choice(active_duration)
+    activity_time = int(interval_time * active_freq / 100)
+    rest_time = interval_time - activity_time
+
+    return [interval_time, activity_time, rest_time]
+
+
 def hiit_timings(total_time: int) -> None:
     """genera un programma di allenamento di tipo hiit
 
@@ -88,39 +111,39 @@ def hiit_timings(total_time: int) -> None:
     """
     total_time = total_time * 60
     consecutive_hi_count = 0
+    effective_training_time = 0
+
     print("20m riscaldamento")
-    print(total_time)
     while total_time > 0:
+        if effective_training_time >= 900:
+            print("1m rest opzionale")
+            effective_training_time = 0
         if total_time > 120:
-            if choice(["m", "h"]) == "m":
-                active_freq = choice(range(75, 91))
-                total_interval = 120
-                mi_time = int(total_interval * active_freq / 100)
-                rest_time = total_interval - mi_time
-                mi_time_formatted = seconds_to_minutes(mi_time)
-                total_time -= 120
-                print(
-                    f"{mi_time_formatted} a media intensità",
-                    f"{rest_time}s di recupero attivo",
-                    sep="\n",
-                )
+            random_intensity_choice = choice(["m", "h"])
+            if consecutive_hi_count == 4:
                 consecutive_hi_count = 0
+                print("30s di recupero attivo o rest", sep="\n")
+                total_time -= 30
             else:
-                if consecutive_hi_count == 4:
-                    print("30s di recupero attivo", sep="\n")
-                    total_time -= 30
-                else:
-                    active_freq = choice(range(67, 84))
-                    total_interval = 60
-                    hi_time = int(total_interval * active_freq / 100)
-                    rest_time = total_interval - hi_time
-                    total_time -= 60
+                interval_time, activity_time, rest_time = generate_interval_times(
+                    random_intensity_choice
+                )
+                total_time -= interval_time
+                effective_training_time += interval_time
+                if random_intensity_choice == "h":
+                    consecutive_hi_count += 1
                     print(
-                        f"{hi_time}s ad alta intensità",
+                        f"{activity_time}s ad alta intensità",
                         f"{rest_time}s di recupero attivo",
                         sep="\n",
                     )
-                    consecutive_hi_count += 1
+                else:
+                    consecutive_hi_count = 0
+                    print(
+                        f"{seconds_to_minutes(activity_time)} a media intensità",
+                        f"{rest_time}s di recupero attivo",
+                        sep="\n",
+                    )
         else:
             print(f"{seconds_to_minutes(total_time)} a media intensità", sep="\n")
             break
