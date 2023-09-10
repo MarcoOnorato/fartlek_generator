@@ -1,5 +1,6 @@
 from random import choice
 from statistics import median
+from typing import Callable, no_type_check
 
 
 def get_fc_thresh(time: int, time_array: range) -> int:
@@ -53,6 +54,23 @@ def seconds_to_minutes(time: int) -> str:
         return f"{time}s"
 
 
+@no_type_check
+def generate_training_session(f: Callable[[list[int | range]], None]) -> None:
+    """decoratore che stampa per ogni tipologia di allenamento 20 minuti di riscaldamento e 10 di defaticamento
+
+    Args:
+        f (Callable[[list[int | range]], None]): funzione del tipo di allenamento scelto
+    """
+
+    def wrapper(*args, **kwargs):
+        print("20m riscaldamento")
+        f(*args, **kwargs)
+        print("10min defaticamento")
+
+    return wrapper
+
+
+@generate_training_session
 def generate_fartlek(
     total_time: int, time_array: range, recovery_modifiers: int
 ) -> None:
@@ -63,7 +81,6 @@ def generate_fartlek(
         time_array (range, optional): range delle durate degli intervalli in minuti
         recovery_modifiers (int): moltiplicatore dei tempi di recupero, [1,3] equivalente di livello [avanzato, intermedio, principiante]
     """
-    print("20m riscaldamento")
     while total_time > 0:
         if total_time > 10:
             high_intensity_time = choice(time_array)
@@ -76,8 +93,6 @@ def generate_fartlek(
             high_intensity_time = int(total_time / total_activity_quota)
             recovery_time = total_time - high_intensity_time
             break
-
-    print("10min defaticamento")
 
 
 def generate_interval_times(type: str) -> list[int]:
@@ -103,6 +118,7 @@ def generate_interval_times(type: str) -> list[int]:
     return [interval_time, activity_time, rest_time]
 
 
+@generate_training_session
 def hiit_timings(total_time: int) -> None:
     """genera un programma di allenamento di tipo hiit
 
@@ -113,7 +129,6 @@ def hiit_timings(total_time: int) -> None:
     consecutive_hi_count = 0
     effective_training_time = 0
 
-    print("20m riscaldamento")
     while total_time > 0:
         if effective_training_time >= 900:
             print("1m rest opzionale")
@@ -147,7 +162,6 @@ def hiit_timings(total_time: int) -> None:
         else:
             print(f"{seconds_to_minutes(total_time)} a media intensità", sep="\n")
             break
-    print("10min defaticamento")
 
 
 def main() -> None:
@@ -208,7 +222,6 @@ def main() -> None:
                 print("""l'input deve essere un numero""")
 
         time_array = range(standard_mintime + modifiers, standard_maxtime + modifiers)
-
         generate_fartlek(total_time, time_array, recovery_modifiers)
 
     if training_type == 2:
